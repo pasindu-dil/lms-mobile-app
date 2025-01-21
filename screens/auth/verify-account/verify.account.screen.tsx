@@ -48,11 +48,16 @@ const VerifyAccountScreen = () => {
       <View style={{ marginTop: 10 }}>
         <Button title="Submit" onPress={handleSubmit} />
       </View>
-      <TouchableOpacity
-      onPress={() => router.back()}
-      >
-        <Text style={{ fontSize: 20, paddingTop: 20, fontWeight: 500 }}>Go back to sign up</Text>
-      </TouchableOpacity>
+      <View style={styles.loginLink}>
+        <Text style={[styles.backText, { fontFamily: "Nunito_400Regular" }]}>
+          Back To?
+        </Text>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={[styles.loginText, { fontFamily: "Nunito_400Regular" }]}>
+            Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -92,4 +97,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 20,
   },
+  loginLink: {
+    flexDirection: "row",
+    marginTop: 20
+  },
+  backText: {
+    fontSize: 16
+  },
+  loginText: {
+    color: "#3476EE",
+    marginLeft: 5,
+    fontSize: 16
+  }
 });
