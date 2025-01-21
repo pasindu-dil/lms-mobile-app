@@ -31,6 +31,9 @@ import {
 import { useState } from "react";
 import { commonStyles } from "@/styles/common/common.styles";
 import { router } from "expo-router";
+import axios from "axios";
+import { SERVER_URI } from "@/utils/uri";
+import { Toast } from "react-native-toast-notifications";
 
 export default function SignUpScreen() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -102,8 +105,20 @@ export default function SignUpScreen() {
     }
   };
 
-  const handleSignUp = () => {
-    router.push("/verify-account");
+  const handleSignUp = async () => {
+    await axios.post(`${SERVER_URI}/api/v1/auth/register`, {
+      name: userInfo.name,
+      email: userInfo.email,
+      password: userInfo.password,
+    }).then((res) => {
+      console.log(res);
+      router.push("/verify-account");
+    }).catch((err) => {
+      Toast.show("Something went wrong please try again", {
+        type: "danger",
+      });
+      console.log(err.response.data.msg);
+    });
   };
 
   return (

@@ -30,6 +30,9 @@ import {
 import { useState } from "react";
 import { commonStyles } from "@/styles/common/common.styles";
 import { router } from "expo-router";
+import axios from "axios";
+import { SERVER_URI } from "@/utils/uri";
+import { Toast } from "react-native-toast-notifications";
 
 export default function LoginScreen() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -42,6 +45,7 @@ export default function LoginScreen() {
   const [error, setError] = useState({
     password: "",
   });
+  const [googleUrl, setGoogleUrl] = useState("");
 
   let [fontsLoaded, fortError] = useFonts({
     Raleway_700Bold,
@@ -100,7 +104,33 @@ export default function LoginScreen() {
     }
   };
 
-  const handleSignIn = () => {};
+  const handleSignIn = async () => {
+    if (!error.password) {
+      await axios.post(`${SERVER_URI}/api/v1/auth/login`, {
+        email: userInfo.email,
+        password: userInfo.password
+      }).then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        Toast.show(err.response.data.message, { type: "danger" });
+        console.log(err.response.data.message);
+      })
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    await axios.post(`${SERVER_URI}/api/v1/auth/get-google-url`, {}).then((res) => {
+      setGoogleUrl(res.data);
+    })
+
+    router.push(googleUrl);
+    
+    // await axios.get(googleUrl).then((res) => {
+    //   console.log(res.data);
+    // }).catch((err) => {
+    //   console.log(err.response.data.message);
+    // })
+  }
 
   return (
     <LinearGradient
@@ -225,7 +255,7 @@ export default function LoginScreen() {
               gap: 10,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleGoogleSignIn}>
               <FontAwesome name="google" size={24} />
             </TouchableOpacity>
             <TouchableOpacity>

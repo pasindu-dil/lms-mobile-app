@@ -11,6 +11,8 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
+import { ToastProvider } from "react-native-toast-notifications";
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -40,7 +42,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  return <>{isLoggedIn ? <View></View> : (
+  return <ToastProvider>{isLoggedIn ? <View></View> : (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="welcome-intro" />
@@ -49,5 +51,5 @@ function RootLayoutNav() {
       <Stack.Screen name="forgot-password" />
       <Stack.Screen name="verify-account" />
     </Stack>
-  )}</>;
+  )}</ToastProvider>;
 }
